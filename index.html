@@ -59,18 +59,8 @@
     nav ul a:hover { color: var(--amber); }
     @media (max-width: 720px) { nav ul { display: none; } }
 
-    /* Hero: letterboxed, golden-hour light */
+    /* Hero: letterboxed */
     .hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; isolation: isolate; }
-    .hero::before { /* light source */
-      content: ""; position: absolute; inset: 0; z-index: -2;
-      background:
-        radial-gradient(60% 70% at 78% 38%, rgba(240,166,74,.38), transparent 62%),
-        radial-gradient(40% 40% at 88% 30%, rgba(255,214,150,.30), transparent 60%),
-        radial-gradient(70% 60% at 10% 100%, rgba(224,104,58,.18), transparent 70%),
-        linear-gradient(180deg, #120d0a 0%, #0d0a08 100%);
-      animation: breathe 9s ease-in-out infinite alternate;
-    }
-    @keyframes breathe { from { filter: brightness(.92); transform: scale(1); } to { filter: brightness(1.08); transform: scale(1.04); } }
     .hero::after { /* vignette */
       content: ""; position: absolute; inset: 0; z-index: -1;
       background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.75) 100%);
@@ -97,15 +87,7 @@
     .btn.ghost:hover { border-color: var(--amber); color: var(--amber); }
     .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
 
-    /* Blend layer: light leak, dust, grass, HUD */
-    .leak { position: absolute; inset: -20% -40%; z-index: -1; pointer-events: none; opacity: 0;
-      background: linear-gradient(100deg, transparent 35%, rgba(255,190,120,.16) 45%, rgba(255,120,60,.10) 50%, transparent 60%);
-      animation: leak 14s ease-in-out infinite; }
-    @keyframes leak { 0%,100% { transform: translateX(-30%); opacity: 0; } 40%,60% { opacity: 1; } 50% { transform: translateX(25%); } }
-    #dust { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-    .grass { position: absolute; left: 0; width: 100%; bottom: 7vh; height: 13vh; z-index: 1; pointer-events: none; opacity: .85; }
-    .grass path { fill: none; stroke: #000; stroke-linecap: round; transform-origin: bottom; transform-box: fill-box; animation: sway 6s ease-in-out infinite alternate; }
-    @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+    /* HUD */
     .hud { position: absolute; inset: calc(7vh + 18px) 24px; z-index: 2; pointer-events: none; }
     .hud i { position: absolute; width: 22px; height: 22px; border: 0 solid var(--amber); opacity: .55; }
     .hud i:nth-child(1) { top: 0; left: 0; border-width: 1px 0 0 1px; }
@@ -123,8 +105,44 @@
     @keyframes rise { to { opacity: 1; transform: none; filter: blur(0); } }
     @keyframes fadein { to { opacity: 1; } }
 
+    /* Living background: bokeh + dust on one fixed canvas */
+    #field { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    main, footer, .hero .wrap, .hud { position: relative; z-index: 1; }
+    .hero .hud { position: absolute; z-index: 2; }
+    .cursor-glow { position: fixed; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; pointer-events: none; z-index: 0;
+      background: radial-gradient(circle, rgba(240,166,74,.10), transparent 62%); opacity: 0; transition: opacity .6s ease; will-change: transform; }
+    body.has-cursor .cursor-glow { opacity: 1; }
+    .progress { position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--amber); transform-origin: left; transform: scaleX(0); opacity: .8; }
+
+    /* Bokeh discs inside act frames */
+    .frame .bk { position: absolute; border-radius: 50%; mix-blend-mode: screen; pointer-events: none; animation: float var(--d, 12s) ease-in-out infinite alternate; animation-delay: var(--dl, 0s); }
+    @keyframes float { from { translate: 0 0; } to { translate: var(--fx, 10px) var(--fy, -8px); } }
+    .frame .layer { position: absolute; inset: -12%; will-change: transform; }
+
+    /* Ghost section numerals (index/catalog), parallax on scroll */
+    .sec-head { position: relative; }
+    .ghostnum { position: absolute; right: -2%; top: 50%; z-index: -1; font: 300 clamp(160px, 26vw, 380px)/.8 var(--serif); letter-spacing: -.06em; color: transparent;
+      -webkit-text-stroke: 1px rgba(240,166,74,.16); pointer-events: none; user-select: none; will-change: transform; }
+    @media (max-width: 760px) { .ghostnum { -webkit-text-stroke-color: rgba(240,166,74,.10); } }
+
+    /* Tilt cards with light glare */
+    .tilt { transform-style: preserve-3d; transition: transform .5s var(--ease-out); will-change: transform; }
+    .tilt::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .4s ease;
+      background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgba(255,200,140,.10), transparent 45%); }
+    .tilt:hover::after { opacity: 1; }
+    .crew div { position: relative; }
+
+    /* Ticker band: constant slow motion */
+    .ticker { position: relative; z-index: 1; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 22px 0; background: rgba(13,10,8,.5); }
+    .ticker .track { display: flex; width: max-content; gap: 48px; animation: tick 60s linear infinite; }
+    .ticker span { font: 300 clamp(26px, 3.4vw, 44px)/1 var(--serif); letter-spacing: -.02em; white-space: nowrap; color: rgba(244,236,225,.82); }
+    .ticker span i { font-style: italic; color: var(--amber); }
+    .ticker b { font: 400 12px/1 var(--mono); color: var(--amber); align-self: center; letter-spacing: .1em; }
+    @keyframes tick { to { transform: translateX(-50%); } }
+    .ticker:hover .track { animation-play-state: paused; }
+
     /* Stats strip */
-    .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--ink-2); }
+    .stats { position: relative; z-index: 1; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(22,17,13,.55); }
     .stats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
     .stat { padding: 36px 24px 32px; border-left: 1px solid var(--line); }
     .stat:first-child { border-left: 0; padding-left: 0; }
@@ -148,18 +166,15 @@
     .story-intro { font-family: var(--serif); font-size: clamp(21px, 2.4vw, 28px); line-height: 1.45; font-weight: 300; max-width: 30ch; margin: -24px 0 64px 232px; color: #e9dfd2; }
     @media (max-width: 760px) { .story-intro { margin: -8px 0 40px 0; } }
     .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-    .act { background: var(--ink); padding: 36px 30px 40px; position: relative; transition: background .4s; }
-    .act:hover { background: var(--ink-2); }
+    .act { background: rgba(13,10,8,.78); padding: 36px 30px 40px; position: relative; transition: background .4s ease; }
+    .act:hover { background: rgba(22,17,13,.7); }
     .act .frame { aspect-ratio: 2.39 / 1; border-radius: 2px; margin-bottom: 28px; position: relative; overflow: hidden; }
-    .act .frame::before { content: ""; position: absolute; inset: -20%; background: inherit; animation: drift 16s ease-in-out infinite alternate; }
-    .act:nth-child(2) .frame::before { animation-delay: -5s; } .act:nth-child(3) .frame::before { animation-delay: -10s; }
-    @keyframes drift { from { transform: translate(-6%, 2%) scale(1); } to { transform: translate(6%, -2%) scale(1.08); } }
     .act .frame b { position: absolute; z-index: 1; width: 10px; height: 10px; border: 0 solid rgba(255,255,255,.5); }
     .act .frame b:nth-of-type(1) { top: 8px; left: 8px; border-width: 1px 0 0 1px; } .act .frame b:nth-of-type(2) { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
     .act .frame::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 120% at 50% 50%, transparent 40%, rgba(0,0,0,.6)); }
-    .act:nth-child(1) .frame { background: radial-gradient(70% 90% at 30% 40%, #3b6b74, #142328 70%), #142328; }
-    .act:nth-child(2) .frame { background: radial-gradient(70% 90% at 60% 45%, #8a5a2b, #2a1a0f 70%), #2a1a0f; }
-    .act:nth-child(3) .frame { background: radial-gradient(70% 90% at 75% 35%, #f0a64a, #6a2a14 65%, #1c0d07), #1c0d07; }
+    .act:nth-child(1) .frame { background: linear-gradient(160deg, #10242a, #081114); }
+    .act:nth-child(2) .frame { background: linear-gradient(160deg, #2a1a0f, #120a05); }
+    .act:nth-child(3) .frame { background: linear-gradient(160deg, #3a1608, #140804); }
     .act .frame span { position: absolute; left: 12px; bottom: 10px; z-index: 1; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: rgba(255,255,255,.7); }
     .act h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -.02em; margin: 10px 0 4px; }
     .act .role { color: var(--amber); font-size: 14px; margin-bottom: 14px; }
@@ -167,7 +182,7 @@
     @media (max-width: 900px) { .acts { grid-template-columns: 1fr; } }
 
     /* Capabilities: index/catalog */
-    .alt { background: var(--ink-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .alt { background: rgba(22,17,13,.5); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .index { border-top: 1px solid var(--line); }
     .row { display: grid; grid-template-columns: 200px 1fr 1.1fr; gap: 32px; padding: 34px 0; border-bottom: 1px solid var(--line); align-items: start; }
     .row .no { font-family: var(--mono); font-size: 13px; color: var(--amber); letter-spacing: .1em; padding-top: 8px; }
@@ -217,8 +232,11 @@
   </style>
 </head>
 <body>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="cursor-glow" aria-hidden="true"></div>
 
   <nav id="nav">
+    <div class="progress" aria-hidden="true"></div>
     <div class="wrap">
       <a class="mark" href="#top">Austin Page<i>.</i></a>
       <ul>
@@ -230,11 +248,8 @@
     </div>
   </nav>
 
-  <header class="hero" id="top">
+  <header class="hero" id="top" data-cool="0">
     <div class="bar top" aria-hidden="true"></div><div class="bar bot" aria-hidden="true"></div>
-    <div class="leak" aria-hidden="true"></div>
-    <canvas id="dust" aria-hidden="true"></canvas>
-    <svg class="grass" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true"></svg>
     <div class="hud" aria-hidden="true">
       <i></i><i></i><i></i><i></i>
       <div class="read tl"><span class="dot"></span><span data-scramble="Unit AP-01 · Online">Unit AP-01 · Online</span></div>
@@ -265,29 +280,29 @@
     </div>
   </div>
 
-  <section id="story">
+  <section id="story" data-cool=".35">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="label">01 · <span data-scramble="The story">The story</span></div>
+        <span class="ghostnum" data-ghost aria-hidden="true">01</span><div class="label">01 · <span data-scramble="The story">The story</span></div>
         <h2>It started with a <em>render.</em></h2>
       </div>
       <p class="story-intro reveal">I learned production from the inside: one product shot at a time. That's why I lead with empathy for the artist and respect for the deadline.</p>
       <div class="acts">
-        <article class="act reveal">
+        <article class="act reveal tilt">
           <div class="frame"><b></b><b></b><span>SC. 01 · 2013–2019</span></div>
           <div class="label">Act I</div>
           <h3>The artist</h3>
           <div class="role">3D Generalist</div>
           <p>Modeling, lighting, and rendering photoreal product imagery and animation for e‑commerce. I learned what great work costs, and what it takes to make it look effortless.</p>
         </article>
-        <article class="act reveal">
+        <article class="act reveal tilt">
           <div class="frame"><b></b><b></b><span>SC. 02 · 2019–2025</span></div>
           <div class="label">Act II</div>
           <h3>The lead</h3>
           <div class="role">3D Team Lead</div>
           <p>Leading nine artists, I built an Agile pipeline that tracked every asset from request to delivery, and became the person stakeholders trusted to turn a business need into a plan.</p>
         </article>
-        <article class="act reveal">
+        <article class="act reveal tilt">
           <div class="frame"><b></b><b></b><span>SC. 03 · 2025–2026</span></div>
           <div class="label">Act III</div>
           <h3>The producer</h3>
@@ -298,10 +313,10 @@
     </div>
   </section>
 
-  <section id="what" class="alt">
+  <section id="what" class="alt" data-cool="1">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="label">02 · <span data-scramble="What I do">What I do</span></div>
+        <span class="ghostnum" data-ghost aria-hidden="true">02</span><div class="label">02 · <span data-scramble="What I do">What I do</span></div>
         <h2>Where business needs meet <em>creative craft.</em></h2>
       </div>
       <div class="index">
@@ -352,13 +367,13 @@
   <section>
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="label">03 · <span data-scramble="The crew">The crew</span></div>
+        <span class="ghostnum" data-ghost aria-hidden="true">03</span><div class="label">03 · <span data-scramble="The crew">The crew</span></div>
         <h2>The people I <em>build up.</em></h2>
       </div>
       <div class="crew">
-        <div class="reveal"><h4>3D artists</h4><p>Modelers, lighters, and lookdev artists creating photoreal product imagery and environments.</p></div>
-        <div class="reveal"><h4>Video &amp; motion</h4><p>Videographers and motion designers bringing products to life for marketing and e‑commerce.</p></div>
-        <div class="reveal"><h4>Design &amp; illustration</h4><p>2D graphic designers and illustrators shaping enhanced content and brand visuals.</p></div>
+        <div class="reveal tilt"><h4>3D artists</h4><p>Modelers, lighters, and lookdev artists creating photoreal product imagery and environments.</p></div>
+        <div class="reveal tilt"><h4>Video &amp; motion</h4><p>Videographers and motion designers bringing products to life for marketing and e‑commerce.</p></div>
+        <div class="reveal tilt"><h4>Design &amp; illustration</h4><p>2D graphic designers and illustrators shaping enhanced content and brand visuals.</p></div>
       </div>
     </div>
   </section>
@@ -370,10 +385,12 @@
     </div>
   </div>
 
+  <div class="ticker" aria-hidden="true"><div class="track"><span>Creative <i>operations</i></span><b>✦</b><span>Pipeline <i>design</i></span><b>✦</b><span>3D &amp; <i>motion</i></span><b>✦</b><span>Team <i>coaching</i></span><b>✦</b><span>AI‑enabled <i>workflows</i></span><b>✦</b><span>Stakeholder <i>trust</i></span><b>✦</b><span>On time, <i>on budget</i></span><b>✦</b><span>Creative <i>operations</i></span><b>✦</b><span>Pipeline <i>design</i></span><b>✦</b><span>3D &amp; <i>motion</i></span><b>✦</b><span>Team <i>coaching</i></span><b>✦</b><span>AI‑enabled <i>workflows</i></span><b>✦</b><span>Stakeholder <i>trust</i></span><b>✦</b><span>On time, <i>on budget</i></span><b>✦</b></div></div>
+
   <section id="experience" class="alt">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="label">04 · <span data-scramble="Experience">Experience</span></div>
+        <span class="ghostnum" data-ghost aria-hidden="true">04</span><div class="label">04 · <span data-scramble="Experience">Experience</span></div>
         <h2>Eleven years, <em>two promotions,</em> one craft.</h2>
       </div>
       <div class="timeline">
@@ -486,28 +503,148 @@
     document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
     document.querySelectorAll('.hero [data-scramble]').forEach(scramble);
 
-    // Grass silhouettes
-    const g = document.querySelector('.grass'); let gp = '';
-    for (let i = 0; i < 140; i++) { const x = i * 8.6 + Math.random() * 6, h = 60 + Math.random() * 140, lean = (Math.random() - .5) * 40;
-      gp += `<path d="M${x} 200 Q ${x + lean / 2} ${200 - h / 2} ${x + lean} ${200 - h}" stroke-width="${1 + Math.random() * 2}" style="animation-delay:-${(Math.random() * 6).toFixed(2)}s;animation-duration:${(5 + Math.random() * 3).toFixed(2)}s"/>`; }
-    g.innerHTML = gp;
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    let mx = .5, my = .5, tmx = .5, tmy = .5, px = -999, py = -999, sy = scrollY;
 
-    // Dust catching the light
-    const cv = document.getElementById('dust'), cx = cv.getContext('2d'); let W, H, P = [], running = true;
-    function size() { const r = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * r; cv.height = H * r; cx.setTransform(r, 0, 0, r, 0, 0);
-      P = Array.from({ length: W < 640 ? 50 : 90 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.8 + .4, s: Math.random() * .3 + .05, o: Math.random() * 6.28 })); }
-    function frame(t) {
-      cx.clearRect(0, 0, W, H);
-      for (const p of P) {
-        if (!reduce) { p.x += Math.sin(t / 3000 + p.o) * .15 + p.s * .4; p.y -= p.s * .5; if (p.y < -5) p.y = H + 5; if (p.x > W + 5) p.x = -5; }
-        const near = Math.max(0, 1 - Math.hypot(p.x - W * .8, p.y - H * .32) / (W * .6));
-        cx.fillStyle = `rgba(255,${200 + near * 30 | 0},${140 + near * 40 | 0},${.12 + near * .6 * (.6 + .4 * Math.sin(t / 700 + p.o))})`;
-        cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.fill();
-      }
-      if (!reduce && running) requestAnimationFrame(frame);
+    // ---------- Living background: exaggerated bokeh + dust ----------
+    const cv = document.getElementById('field'), cx = cv.getContext('2d');
+    let W, H, DPR, B = [], D = [];
+    const WARM = [[255,196,120],[255,166,80],[240,120,60],[255,224,170]];
+    const COOL = [[120,210,255],[150,190,255],[255,170,110]];
+    const spriteCache = new Map();
+    // Pre-render a bokeh disc: flat body, brighter rim, soft edge set by depth
+    function sprite(rgb, soft) {
+      const key = rgb.join() + soft; if (spriteCache.has(key)) return spriteCache.get(key);
+      const R = 128, c = document.createElement('canvas'); c.width = c.height = R * 2; const g = c.getContext('2d');
+      const [r, gg, b] = rgb, col = a => `rgba(${r},${gg},${b},${a})`;
+      const edge = 1 - soft * .5;
+      const grd = g.createRadialGradient(R, R, 0, R, R, R);
+      grd.addColorStop(0, col(.5)); grd.addColorStop(edge * .75, col(.55));
+      grd.addColorStop(edge * .94, col(.8)); grd.addColorStop(edge, col(.62));
+      grd.addColorStop(Math.min(1, edge + soft * .5), col(0));
+      g.fillStyle = grd; g.beginPath(); g.arc(R, R, R, 0, 7); g.fill();
+      spriteCache.set(key, c); return c;
     }
-    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was) requestAnimationFrame(frame); }).observe(document.querySelector('.hero'));
-    addEventListener('resize', size); size(); requestAnimationFrame(frame);
+    function build() {
+      DPR = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
+      cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const n = W < 640 ? 22 : 40;
+      B = Array.from({ length: n }, (_, k) => {
+        const z = Math.random() ** 1.4;                      // depth 0 (far) .. 1 (near)
+        const cool = k % 4 === 0;
+        const rgb = (cool ? COOL : WARM)[(Math.random() * (cool ? COOL : WARM).length) | 0];
+        return { x: Math.random() * W, y: Math.random() * H * 1.4, z, cool,
+          r: lerp(16, W < 640 ? 90 : 170, z) * (.7 + Math.random() * .6),
+          a: lerp(.3, .8, Math.random()), soft: lerp(.15, .9, 1 - z) * .6 + .1,
+          vx: (Math.random() - .5) * .08, vy: -(.04 + Math.random() * .12), ph: Math.random() * 6.28,
+          img: sprite(rgb, Math.round((lerp(.15, .9, 1 - z)) * 10) / 10) };
+      });
+      D = Array.from({ length: W < 640 ? 50 : 110 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .3,
+        s: Math.random() * .3 + .05, o: Math.random() * 6.28, dx: 0, dy: 0 }));
+    }
+    // Cool tint follows sections tagged with data-cool
+    const coolEls = [...document.querySelectorAll('[data-cool]')];
+    let cool = 0;
+    function coolTarget() {
+      let best = 0, bestVis = 0;
+      for (const el of coolEls) { const r = el.getBoundingClientRect(); const vis = Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0));
+        if (vis > bestVis) { bestVis = vis; best = +el.dataset.cool; } }
+      return bestVis ? best : .15;
+    }
+    let running = true, t0 = performance.now();
+    function draw(t) {
+      mx = lerp(mx, tmx, .05); my = lerp(my, tmy, .05);
+      cool = lerp(cool, coolTarget(), .03);
+      const heroFade = Math.max(0, 1 - scrollY / (H * 1.1));
+      const intensity = .45 + .55 * heroFade;
+      cx.clearRect(0, 0, W, H);
+      cx.globalCompositeOperation = 'lighter';
+      for (const b of B) {
+        if (!reduce) { b.x += b.vx; b.y += b.vy * (1 + b.z); }
+        const par = 40 + 140 * b.z;                           // parallax strength by depth
+        let x = b.x + (mx - .5) * -par;
+        let y = b.y + (my - .5) * -par * .6 - scrollY * (.08 + .35 * b.z);
+        const span = H * 1.4 + b.r * 2; y = ((y + b.r) % span + span) % span - b.r;
+        if (b.x < -b.r * 2) b.x = W + b.r; if (b.x > W + b.r * 2) b.x = -b.r;
+        const pulse = .85 + .15 * Math.sin(t / 2400 + b.ph);
+        let a = b.a * pulse * intensity * (b.cool ? cool * 1.1 : 1 - cool * .35);
+        if (a < .01) continue;
+        cx.globalAlpha = Math.min(1, a);
+        cx.drawImage(b.img, x - b.r, y - b.r, b.r * 2, b.r * 2);
+      }
+      // dust: drifts up, catches light, scatters from the cursor
+      cx.globalAlpha = 1;
+      for (const p of D) {
+        if (!reduce) { p.x += Math.sin(t / 3000 + p.o) * .15 + p.s * .4; p.y -= p.s * .5; }
+        let x = p.x + (mx - .5) * -30, y = p.y - scrollY * .5;
+        y = ((y % H) + H) % H; if (p.x > W + 5) p.x = -5;
+        const dx = x - px, dy = y - py, d2 = dx * dx + dy * dy;
+        if (d2 < 14400) { const f = (1 - Math.sqrt(d2) / 120) * 2.2; p.dx += dx / 120 * f; p.dy += dy / 120 * f; }
+        p.dx *= .93; p.dy *= .93; p.x += p.dx; p.y += p.dy;
+        const tw = .6 + .4 * Math.sin(t / 700 + p.o);
+        cx.fillStyle = `rgba(255,${215 + 20 * tw | 0},${160 + 40 * tw | 0},${(.18 + .5 * tw) * intensity})`;
+        cx.beginPath(); cx.arc(x, y, p.r, 0, 7); cx.fill();
+      }
+      cx.globalCompositeOperation = 'source-over';
+      if (running && !reduce) requestAnimationFrame(draw);
+    }
+    addEventListener('resize', build); build(); requestAnimationFrame(draw);
+    document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !reduce) requestAnimationFrame(draw); });
+
+    // ---------- Cursor ----------
+    const glow = document.querySelector('.cursor-glow');
+    let gx = innerWidth / 2, gy = innerHeight / 2, tgx = gx, tgy = gy;
+    if (fine) {
+      addEventListener('pointermove', e => { tmx = e.clientX / innerWidth; tmy = e.clientY / innerHeight; px = e.clientX; py = e.clientY; tgx = e.clientX; tgy = e.clientY; document.body.classList.add('has-cursor'); }, { passive: true });
+      document.addEventListener('pointerleave', () => { document.body.classList.remove('has-cursor'); px = py = -999; });
+      // tilt + glare
+      document.querySelectorAll('.tilt').forEach(el => {
+        el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+          el.style.transform = `perspective(900px) rotateX(${(.5 - y) * 6}deg) rotateY(${(x - .5) * 8}deg) translateZ(0)`;
+          el.style.setProperty('--gx', x * 100 + '%'); el.style.setProperty('--gy', y * 100 + '%'); });
+        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      });
+      // magnetic buttons
+      document.querySelectorAll('.btn').forEach(el => {
+        el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect();
+          el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px, ${(e.clientY - r.top - r.height / 2) * .28}px)`; });
+        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      });
+    } else {
+      // touch / no cursor: let device scroll steer the bokeh gently
+      addEventListener('scroll', () => { tmy = .5 + Math.sin(scrollY / 600) * .15; }, { passive: true });
+    }
+
+    // ---------- Act frames: tiny bokeh scenes ----------
+    const palettes = [[[120,210,255],[90,170,200],[255,220,170]], [[255,190,110],[240,150,70],[255,230,180]], [[255,170,80],[240,110,50],[255,214,150]]];
+    document.querySelectorAll('.act .frame').forEach((f, k) => {
+      const layer = document.createElement('div'); layer.className = 'layer'; f.prepend(layer);
+      for (let i = 0; i < 9; i++) { const d = document.createElement('span'); d.className = 'bk'; const c = palettes[k][i % 3], sz = 14 + Math.random() * 60;
+        d.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;
+          background:radial-gradient(circle, rgba(${c},.35) 0 58%, rgba(${c},.7) 66%, rgba(${c},.0) 72%);filter:blur(${(Math.random() * 2.5).toFixed(1)}px);
+          --d:${8 + Math.random() * 8}s;--dl:-${Math.random() * 8}s;--fx:${(Math.random() - .5) * 30}px;--fy:${(Math.random() - .5) * 20}px`;
+        layer.appendChild(d); }
+    });
+
+    // ---------- Scroll-driven parallax ----------
+    const prog = document.querySelector('.progress');
+    const heroWrap = document.querySelector('.hero .wrap'), hud = document.querySelector('.hud');
+    const ghosts = [...document.querySelectorAll('[data-ghost]')];
+    const layers = [...document.querySelectorAll('.frame .layer')];
+    function onScrollFx() {
+      const y = scrollY, vh = innerHeight;
+      prog.style.transform = `scaleX(${y / (document.documentElement.scrollHeight - vh)})`;
+      if (!reduce) {
+        if (y < vh * 1.2) { heroWrap.style.transform = `translate3d(0, ${y * .28}px, 0)`; heroWrap.style.opacity = Math.max(0, 1 - y / (vh * .75)); hud.style.transform = `translate3d(0, ${y * .12}px, 0)`; }
+        for (const g of ghosts) { const r = g.parentElement.getBoundingClientRect(); const c = (r.top + r.height / 2 - vh / 2) / vh; g.style.transform = `translate3d(${c * -40}px, calc(-50% + ${c * 140}px), 0)`; }
+        for (const l of layers) { const r = l.parentElement.getBoundingClientRect(); const c = (r.top + r.height / 2 - vh / 2) / vh; l.style.transform = `translate3d(0, ${c * -36}px, 0) scale(1.05)`; }
+      }
+    }
+    let ticking = false;
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { onScrollFx(); ticking = false; }); } }, { passive: true });
+    onScrollFx();
+    (function glowLoop() { gx = lerp(gx, tgx, .12); gy = lerp(gy, tgy, .12); glow.style.transform = `translate3d(${gx}px, ${gy}px, 0)`; if (fine && !reduce) requestAnimationFrame(glowLoop); })();
   })();
   </script>
 </body>
