@@ -295,65 +295,99 @@ const ground = new THREE.Mesh(new THREE.PlaneGeometry(40000, 40000, 1, 1), new T
 }));
 ground.rotation.x = -Math.PI / 2; scene.add(ground);
 
-// ---------- Reeds: instanced blades ----------
-const COUNT = small ? 38000 : 110000;
-const SEG = 4;
+// ---------- Grass: instanced blades, clumped, curved and creased ----------
+const COUNT = small ? 42000 : 120000;
+const SEG = 5;
 const blade = new THREE.InstancedBufferGeometry();
 {
   const pos = [], idx = [];
-  for (let i = 0; i <= SEG; i++) { const y = i / SEG, w = .5 * (1 - y * .92); pos.push(-w, y, 0, w, y, 0); }
+  for (let i = 0; i <= SEG; i++) { const y = i / SEG, w = .5 * (1 - Math.pow(y, 1.6)); pos.push(-w, y, 0, w, y, 0); }   // tapers to a point
   for (let i = 0; i < SEG; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
   blade.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   blade.setIndex(idx);
-  const off = new Float32Array(COUNT * 4), shape = new Float32Array(COUNT * 4);
+  const off = new Float32Array(COUNT * 4), shape = new Float32Array(COUNT * 4), bend = new Float32Array(COUNT * 4);
+  let cx = 0, cz = 0, cHalf = 1, cTint = 0, cH = 1, left = 0;
   for (let i = 0; i < COUNT; i++) {
-    const r = Math.random();
-    const z = -(1.2 + 58 * Math.pow(r, 1.6));             // denser near the camera
-    const half = Math.abs(z) * .62 + 3;                     // span matches the view width at that depth
-    off[i * 4] = (Math.random() * 2 - 1) * half; off[i * 4 + 1] = z; off[i * 4 + 2] = half; off[i * 4 + 3] = Math.random();
-    shape[i * 4] = .55 + Math.random() * .6;                // height (m)
-    shape[i * 4 + 1] = .022 + Math.random() * .02;          // width (m)
-    shape[i * 4 + 2] = Math.random() * Math.PI;             // facing
-    shape[i * 4 + 3] = Math.random();                       // tint variation
+    if (left-- <= 0) {                                      // start a new clump (tuft)
+      const r = Math.random();
+      cz = -(.6 + 58 * Math.pow(r, 1.9));                  // denser near the camera
+      cHalf = Math.abs(cz) * .62 + 3;
+      cx = (Math.random() * 2 - 1) * cHalf;
+      cTint = Math.random(); cH = .75 + Math.random() * .5; left = 6 + Math.floor(Math.random() * 14);
+    }
+    const a = Math.random() * 6.283, rr = Math.sqrt(Math.random()) * (.09 + Math.abs(cz) * .004);
+    off[i * 4] = cx + Math.cos(a) * rr; off[i * 4 + 1] = cz + Math.sin(a) * rr; off[i * 4 + 2] = cHalf; off[i * 4 + 3] = Math.random();
+    const dry = Math.random() < .09;                          // a few straw-coloured blades
+    shape[i * 4] = (.38 + Math.random() * .5) * cH * (dry ? .8 : 1);   // height (m)
+    shape[i * 4 + 1] = .012 + Math.random() * .014;          // width (m): thin, like real grass
+    shape[i * 4 + 2] = Math.random() * Math.PI * 2;          // facing
+    shape[i * 4 + 3] = dry ? 1.5 : cTint * .6 + Math.random() * .4;   // tint: clump hue + per-blade jitter
+    // static curvature: blades splay out from the clump centre and arc over
+    const out = Math.atan2(Math.sin(a), Math.cos(a)) + (Math.random() - .5) * 1.2;
+    bend[i * 4] = Math.cos(out); bend[i * 4 + 1] = Math.sin(out);
+    bend[i * 4 + 2] = .15 + Math.pow(Math.random(), 1.5) * .75;   // lean
+    bend[i * 4 + 3] = (Math.random() - .5) * 1.4;               // blade twist along its length
   }
   blade.setAttribute('aOff', new THREE.InstancedBufferAttribute(off, 4));
   blade.setAttribute('aShape', new THREE.InstancedBufferAttribute(shape, 4));
+  blade.setAttribute('aBend', new THREE.InstancedBufferAttribute(bend, 4));
   blade.instanceCount = COUNT;
 }
 const reeds = new THREE.Mesh(blade, new THREE.ShaderMaterial({
   uniforms: U, side: THREE.DoubleSide,
   vertexShader: /* glsl */`
-    uniform float uTime, uGust, uDolly; attribute vec4 aOff, aShape;
-    varying float vH; varying float vTint; varying vec3 vW; varying vec3 vN;
+    uniform float uTime, uGust, uDolly; attribute vec4 aOff, aShape, aBend;
+    varying float vH; varying float vTint; varying vec3 vW; varying vec3 vN; varying float vSide;
     void main(){
       float h = position.y;
       float half_ = aOff.z;
       float x = mod(aOff.x + uDolly + half_, half_ * 2.0) - half_;   // endless lateral drift
       vec3 root = vec3(x, 0.0, aOff.y);
-      float c = cos(aShape.z), s = sin(aShape.z);
-      float wd = aShape.y * (1.0 + abs(aOff.y) * .035);
-      vec3 p = vec3(position.x * wd * c, h * aShape.x, position.x * wd * s);
+      float ang = aShape.z + aBend.w * h;                             // twist up the blade
+      float c = cos(ang), s = sin(ang);
+      float H = aShape.x;
+      float wd = aShape.y * (1.0 + abs(aOff.y) * .03);
+      vec3 across = vec3(c, 0.0, s);
+      vec3 p = across * position.x * wd;
+      // static arc: lean outward from the clump, keeping roughly constant length
+      float lean = aBend.z;
+      vec2 ld = aBend.xy;
+      float arc = lean * h * h;
+      p += vec3(ld.x * arc * H, h * H * (1.0 - .35 * lean * h * h), ld.y * arc * H);
       // wind: soft breeze always, gusts from scrolling roll across the field
       vec2 wp = root.xz + vec2(uDolly, 0.0);
-      float breeze = .22 + .12 * sin(wp.x * .45 + uTime * 1.4 + aOff.w * 6.0) + .1 * sin(wp.x * .11 + wp.y * .17 + uTime * .6);
+      float breeze = .18 + .1 * sin(wp.x * .45 + uTime * 1.4 + aOff.w * 6.0) + .08 * sin(wp.x * .11 + wp.y * .17 + uTime * .6);
       float wave = uGust * (.6 + .4 * sin(wp.x * .09 - wp.y * .05 - uTime * 2.2 * sign(uGust + 1e-4)));
       float bend = (breeze + wave) * h * h;
-      p.x += bend * aShape.x * .65; p.z -= bend * aShape.x * .15; p.y -= bend * bend * aShape.x * .25;
+      p.x += bend * H * .6; p.z -= bend * H * .12; p.y -= bend * bend * H * .25;
       vec4 w = modelMatrix * vec4(root + p, 1.0);
-      vH = h; vTint = aShape.w; vW = w.xyz; vN = normalize(vec3(s, .35, -c));
+      // normal: faces out of the blade, bent back with the arc; vSide rounds it across the width (creased blade)
+      vec3 face = vec3(-s, 0.0, c);
+      vec3 n = normalize(face + vec3(0.0, .6 * (lean * h + bend), 0.0) + across * position.x * 1.4);
+      vH = h; vTint = aShape.w; vW = w.xyz; vN = n; vSide = position.x * 2.0;
       gl_Position = projectionMatrix * viewMatrix * w;
     }`,
   fragmentShader: /* glsl */`
     uniform vec3 uSunCol, uAmb, uFogCol, uSunDir; uniform float uFogDen, uBack;
-    varying float vH; varying float vTint; varying vec3 vW; varying vec3 vN;
+    varying float vH; varying float vTint; varying vec3 vW; varying vec3 vN; varying float vSide;
     void main(){
-      vec3 rootC = vec3(.02, .07, .01), tipC = mix(vec3(.16, .36, .04), vec3(.28, .42, .06), vTint);
-      vec3 albedo = mix(rootC, tipC, pow(vH, .8));
       vec3 V = normalize(cameraPosition - vW);
-      float diff = abs(dot(normalize(vN), uSunDir)) * .6 + .4;
-      float back = pow(max(dot(-V, uSunDir), 0.0), 6.0) * vH;          // light glowing through the blades
-      vec3 col = albedo * (uAmb * (.6 + .4 * vH) + uSunCol * max(uSunDir.y + .05, 0.0) * diff)
-               + uSunCol * back * vec3(.9, .8, .35) * uBack;
+      vec3 N = normalize(vN); if (dot(N, V) < 0.0) N = -N;
+      // albedo: deep-green clumps to fresh yellow-green, a few dry straw blades, lighter tips
+      vec3 deep = vec3(.045, .13, .02), fresh = vec3(.19, .40, .05), warm = vec3(.30, .44, .08), straw = vec3(.42, .34, .15);
+      vec3 tip = vTint > 1.2 ? straw : mix(mix(deep * 1.8, fresh, smoothstep(0.0, .6, vTint)), warm, smoothstep(.6, 1.0, vTint));
+      vec3 albedo = mix(tip * .35, tip, smoothstep(0.0, .75, vH));
+      albedo = mix(albedo, albedo * vec3(1.15, 1.1, .8), smoothstep(.75, 1.0, vH));   // sun-bleached tips
+      float ao = mix(.3, 1.0, pow(vH, .6));                       // self-shadowing down in the thatch
+      float ndl = dot(N, uSunDir);
+      float diff = max(ndl, 0.0) * .55 + .45 + .25 * vH;
+      vec3 Hh = normalize(uSunDir + V);
+      float spec = pow(max(dot(N, Hh), 0.0), 48.0) * .35 * (1.0 - abs(vSide) * .5);  // waxy sheen along the crease
+      float trans = pow(max(dot(-V, uSunDir), 0.0), 4.0) * (.4 + .6 * vH) * (1.0 - max(ndl, 0.0) * .5);   // light through the blade
+      float sunUp = clamp(uSunDir.y + .05, 0.0, 1.0);
+      vec3 col = albedo * ao * (uAmb * (.55 + .45 * vH) + uSunCol * sunUp * diff)
+               + uSunCol * sunUp * spec * ao
+               + uSunCol * trans * (tip * 2.2 + vec3(.05, .06, 0.0)) * (.35 + uBack);
       float dist = length(vW - cameraPosition);
       col = mix(col, uFogCol, 1.0 - exp(-dist * uFogDen));
       gl_FragColor = vec4(col, 1.0);

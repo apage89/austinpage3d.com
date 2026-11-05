@@ -120,7 +120,7 @@
     body.has-cursor .cursor-glow { opacity: 1; }
     .progress { position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--amber); transform-origin: left; transform: scaleX(0); opacity: .8; }
 
-    /* Act frames: noon, golden hour, dusk */
+    /* Act frames: one icon per act, drawn in on reveal */
     .frame .layer { position: absolute; inset: -12%; will-change: transform; }
 
     /* Ghost section numerals (index/catalog), parallax on scroll */
@@ -176,9 +176,28 @@
     .act .frame b { position: absolute; z-index: 1; width: 10px; height: 10px; border: 0 solid rgba(255,255,255,.5); }
     .act .frame b:nth-of-type(1) { top: 8px; left: 8px; border-width: 1px 0 0 1px; } .act .frame b:nth-of-type(2) { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
     .act .frame::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 120% at 50% 50%, transparent 40%, rgba(0,0,0,.6)); }
-    .act:nth-child(1) .frame .layer { background: radial-gradient(circle at 80% 18%, #fff 0 3.5%, rgba(255,255,240,.5) 5%, transparent 22%), linear-gradient(175deg, transparent 60%, #8cc45a 60.4%, #3d8c24 100%), linear-gradient(180deg, #2868c4, #c4def4 62%); }
-    .act:nth-child(2) .frame .layer { background: radial-gradient(circle at 74% 42%, #fff4d6 0 4.5%, rgba(255,214,140,.55) 6.5%, transparent 30%), linear-gradient(175deg, transparent 60%, #a4a85a 60.4%, #3e6224 100%), linear-gradient(180deg, #46659c, #f4c482 62%); }
-    .act:nth-child(3) .frame .layer { background: radial-gradient(circle at 68% 58%, #ffb27a 0 5.5%, rgba(255,140,90,.5) 8%, transparent 34%), linear-gradient(175deg, transparent 60%, #4a4e3a 60.4%, #141e18 100%), linear-gradient(180deg, #161e40, #e28870 62%); }
+    .act .frame { background: linear-gradient(180deg, rgba(20,26,40,.9), rgba(8,10,16,.95)); border: 1px solid rgba(255,255,255,.07); }
+    .act .frame .layer { background-image: linear-gradient(rgba(140,180,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(140,180,255,.07) 1px, transparent 1px); background-size: 22px 22px; }
+    .act .frame .glyph { position: absolute; inset: 0 0 14% 0; margin: auto; height: 70%; width: auto; z-index: 1; overflow: visible; }
+    .glyph * { vector-effect: non-scaling-stroke; }
+    .glyph .ln { fill: none; stroke: rgba(236,240,250,.85); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+    .glyph .dim { stroke: rgba(160,190,240,.35); stroke-dasharray: 2 3; }
+    .glyph .hot { stroke: var(--amber); }
+    .glyph .dot { fill: rgba(236,240,250,.95); } .glyph .dot.hot { fill: var(--amber); stroke: none; }
+    .glyph .glow { filter: drop-shadow(0 0 6px rgba(240,166,74,.7)); }
+    .glyph .draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s var(--ease-out); }
+    .act.in .glyph .draw { stroke-dashoffset: 0; }
+    .act:nth-child(2).in .glyph .draw { transition-delay: .15s; } .act:nth-child(3).in .glyph .draw { transition-delay: .3s; }
+    .glyph .spin { transform-box: fill-box; transform-origin: center; animation: spin 14s linear infinite; }
+    .glyph .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 2.4s var(--ease-in-out) infinite; }
+    .glyph .twinkle { transform-box: fill-box; transform-origin: center; animation: twinkle 3s var(--ease-in-out) infinite; }
+    .glyph .flow { stroke-dasharray: 3 9; animation: flow 1.6s linear infinite; }
+    .glyph .scan { animation: scan 4s var(--ease-in-out) infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 50% { transform: scale(1.35); opacity: .6; } }
+    @keyframes twinkle { 0%,100% { transform: scale(.7) rotate(0deg); opacity: .6; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+    @keyframes flow { to { stroke-dashoffset: -12; } }
+    @keyframes scan { 0%,100% { transform: translateY(0); opacity: 0; } 15%,85% { opacity: .9; } 50% { transform: translateY(46px); } }
     .act .frame span { position: absolute; left: 12px; bottom: 10px; z-index: 1; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: rgba(255,255,255,.7); }
     .act h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -.02em; margin: 10px 0 4px; }
     .act .role { color: var(--amber); font-size: 14px; margin-bottom: 14px; }
@@ -294,21 +313,42 @@
       <p class="story-intro reveal">I learned production from the inside: one product shot at a time. That's why I lead with empathy for the artist and respect for the deadline.</p>
       <div class="acts">
         <article class="act reveal tilt">
-          <div class="frame"><b></b><b></b><span>SC. 01 · 2013–2019</span></div>
+          <div class="frame"><b></b><b></b><svg class="glyph" viewBox="0 0 120 100" aria-hidden="true">
+            <path class="ln dim" d="M60 8 L60 92 M18 32 L102 68 M102 32 L18 68"/>
+            <path class="ln draw" pathLength="1" d="M60 14 L96 33 L96 69 L60 88 L24 69 L24 33 Z M24 33 L60 52 L96 33 M60 52 L60 88"/>
+            <path class="ln draw hot glow" pathLength="1" d="M60 14 L96 33 L60 52 L24 33 Z"/>
+            <line class="ln hot scan" x1="28" y1="30" x2="92" y2="30" style="opacity:0"/>
+            <circle class="dot" cx="60" cy="14" r="2"/><circle class="dot" cx="96" cy="33" r="2"/><circle class="dot" cx="96" cy="69" r="2"/><circle class="dot" cx="60" cy="88" r="2"/><circle class="dot" cx="24" cy="69" r="2"/><circle class="dot" cx="24" cy="33" r="2"/><circle class="dot hot" cx="60" cy="52" r="2.4"/>
+            <g class="spin"><circle class="ln hot" cx="104" cy="14" r="5"/><path class="ln hot" d="M104 4 V7 M104 21 V24 M94 14 H97 M111 14 H114"/></g>
+          </svg><span>SC. 01 · 2013–2019</span></div>
           <div class="label">Act I</div>
           <h3>The artist</h3>
           <div class="role">3D Generalist</div>
           <p>Modeling, lighting, and rendering photoreal product imagery and animation for e‑commerce. I learned what great work costs, and what it takes to make it look effortless.</p>
         </article>
         <article class="act reveal tilt">
-          <div class="frame"><b></b><b></b><span>SC. 02 · 2019–2025</span></div>
+          <div class="frame"><b></b><b></b><svg class="glyph" viewBox="0 0 120 100" aria-hidden="true">
+            <circle class="ln dim" cx="60" cy="50" r="44"/>
+            <path class="ln draw" pathLength="1" d="M60 50 L18 22 M60 50 L18 50 M60 50 L18 78 M60 50 L40 10 M60 50 L40 90 M60 50 L80 10 M60 50 L80 90 M60 50 L102 30 M60 50 L102 70"/>
+            <path class="ln hot flow" d="M60 50 L18 22 M60 50 L18 50 M60 50 L18 78 M60 50 L40 10 M60 50 L40 90 M60 50 L80 10 M60 50 L80 90 M60 50 L102 30 M60 50 L102 70"/>
+            <circle class="dot" cx="18" cy="22" r="2.6"/><circle class="dot" cx="18" cy="50" r="2.6"/><circle class="dot" cx="18" cy="78" r="2.6"/><circle class="dot" cx="40" cy="10" r="2.6"/><circle class="dot" cx="40" cy="90" r="2.6"/><circle class="dot" cx="80" cy="10" r="2.6"/><circle class="dot" cx="80" cy="90" r="2.6"/><circle class="dot" cx="102" cy="30" r="2.6"/><circle class="dot" cx="102" cy="70" r="2.6"/>
+            <circle class="ln hot glow draw" pathLength="1" cx="60" cy="50" r="9"/>
+            <circle class="dot hot pulse" cx="60" cy="50" r="4"/>
+          </svg><span>SC. 02 · 2019–2025</span></div>
           <div class="label">Act II</div>
           <h3>The lead</h3>
           <div class="role">3D Team Lead</div>
           <p>Leading nine artists, I built an Agile pipeline that tracked every asset from request to delivery, and became the person stakeholders trusted to turn a business need into a plan.</p>
         </article>
         <article class="act reveal tilt">
-          <div class="frame"><b></b><b></b><span>SC. 03 · 2025–2026</span></div>
+          <div class="frame"><b></b><b></b><svg class="glyph" viewBox="0 0 120 100" aria-hidden="true">
+            <path class="ln draw" pathLength="1" d="M22 44 H92 V88 H22 Z M22 58 H92"/>
+            <path class="ln draw" pathLength="1" d="M22 44 L20 30 L88 18 L90 32 Z"/>
+            <path class="ln hot draw glow" pathLength="1" d="M33 28 L38 41 M48 25 L53 38 M63 23 L68 36 M78 20 L83 33"/>
+            <path class="ln dim" d="M30 68 H60 M30 76 H52"/>
+            <g class="twinkle glow"><path class="dot hot" d="M96 50 C97.5 58 98 60.5 106 62 C98 63.5 97.5 66 96 74 C94.5 66 94 63.5 86 62 C94 60.5 94.5 58 96 50 Z"/></g>
+            <g class="twinkle" style="animation-delay:-1.4s"><path class="dot" d="M108 36 C108.8 40.5 109.5 41.2 114 42 C109.5 42.8 108.8 43.5 108 48 C107.2 43.5 106.5 42.8 102 42 C106.5 41.2 107.2 40.5 108 36 Z"/></g>
+          </svg><span>SC. 03 · 2025–2026</span></div>
           <div class="label">Act III</div>
           <h3>The producer</h3>
           <div class="role">Creative Production Manager</div>
