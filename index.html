@@ -25,7 +25,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: #0b0d12; color: var(--snow); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body { background: #0e0e10; color: var(--snow); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { color: inherit; }
     img { display: block; max-width: 100%; }
     ::selection { background: var(--amber); color: #111; }
@@ -35,8 +35,6 @@
     .narrow { max-width: 620px; }
     @media (max-width: 600px) { .wrap { padding: 0 16px; } }
 
-    #field, #gl { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-    #gl { opacity: 0; transition: opacity .8s ease; } body.webgl #gl { opacity: 1; }
     main, footer { position: relative; z-index: 1; }
 
     /* Floating pill nav */
@@ -63,8 +61,6 @@
 
     /* Hero: noon sky window */
     .hero { min-height: 100svh; padding: 120px 0 40px; display: flex; flex-direction: column; justify-content: center; isolation: isolate; position: relative; }
-    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-      background: linear-gradient(180deg, rgba(6,12,26,.55), rgba(6,12,26,.2) 40%, rgba(6,12,26,.15) 70%, rgba(6,12,26,0)); }
     .hero .wrap { width: 100%; min-width: 0; }
     .loc { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--snow-2); margin-bottom: 18px; }
     .loc i { width: 7px; height: 7px; border-radius: 50%; background: #7ef0b0; box-shadow: 0 0 0 3px rgba(126,240,176,.18); }
@@ -88,7 +84,7 @@
 
     /* Tactile objects */
     .chip { position: absolute; padding: 10px 20px; border-radius: 14px; font: 800 26px/1 var(--display); letter-spacing: -.02em; color: #fff;
-      box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -4px 0 rgba(0,0,0,.22), 0 10px 18px -6px rgba(0,0,0,.55); transform: rotate(var(--r)); animation: bob 5s var(--ease-in-out) infinite; animation-delay: var(--d, 0s); }
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -4px 0 rgba(0,0,0,.22), 0 10px 18px -6px rgba(0,0,0,.55); transform: rotate(var(--r)); }
     .chip.c1 { background: linear-gradient(180deg, #ffcf8a, #f0a64a 55%, #c97a2c); color: #3a2208; }
     .chip.c2 { background: linear-gradient(180deg, #9fd6ff, #4b9ef0 55%, #2a6dc0); }
     .chip.c3 { background: linear-gradient(180deg, #ff9db6, #e85b7f 55%, #b53a5c); }
@@ -100,15 +96,11 @@
     .sticker { position: absolute; display: grid; place-items: center; text-align: center; border-radius: 16px; font: 800 20px/.95 var(--display); letter-spacing: -.02em;
       box-shadow: 0 0 0 4px #fff, 0 12px 22px -6px rgba(0,0,0,.5); transform: rotate(var(--r)); }
 
-    /* Horizon bands: sky meets paper */
-    .band { height: clamp(140px, 22vw, 240px); position: relative; z-index: 1; pointer-events: none; }
-    .band.to-paper { background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--glow) 55%, var(--paper) 100%); }
-    .band.from-paper { background: linear-gradient(180deg, var(--paper) 0%, var(--glow) 45%, rgba(0,0,0,0) 100%); }
 
     /* Light (paper) sections */
     .light { background: var(--paper); color: var(--ink); }
     .light section { padding: clamp(56px, 8vw, 110px) 0; }
-    .light section:first-child { padding-top: 10px; }
+    .light section:first-child { padding-top: clamp(80px, 10vw, 130px); }
 
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 48px; }
     .stat { padding: 4px 28px 0; border-left: 1px solid #dddcd6; }
@@ -154,14 +146,14 @@
     .wcard.next .art { background: radial-gradient(circle at 50% 40%, #fff, #f1f0eb); }
     .open-sticker { position: relative; width: 70%; aspect-ratio: 1.6; border-radius: 22px; transform: rotate(-8deg); display: grid; place-items: center; text-align: center;
       font: 800 clamp(30px, 4vw, 48px)/.88 var(--display); letter-spacing: -.03em; color: #fff;
-      background: linear-gradient(135deg, #ffcf8a, #f0a64a 35%, #e85b7f 70%, #4b9ef0); box-shadow: 0 0 0 6px #fff, 0 18px 30px -10px rgba(0,0,0,.4); animation: bob 6s var(--ease-in-out) infinite; --r: -8deg; }
-    .open-sticker::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.55) 48%, transparent 60%); background-size: 250% 100%; animation: sheen 4.5s ease-in-out infinite; }
+      background: linear-gradient(135deg, #ffcf8a, #f0a64a 35%, #e85b7f 70%, #4b9ef0); box-shadow: 0 0 0 6px #fff, 0 18px 30px -10px rgba(0,0,0,.4); --r: -8deg; }
+    .open-sticker::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.55) 48%, transparent 60%); background-size: 250% 100%; background-position: 120% 0; transition: background-position .9s var(--ease-out); }
+    .wcard:hover .open-sticker::after { background-position: -120% 0; }
     @keyframes sheen { 0%, 60% { background-position: 120% 0; } 100% { background-position: -120% 0; } }
     @media (max-width: 720px) { .work { grid-template-columns: 1fr; } }
 
     /* Story: golden-hour sky window */
-    .story { position: relative; isolation: isolate; padding: 40px 0 60px; }
-    .story::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10,10,14,.35), rgba(10,10,14,.62) 30%, rgba(10,10,14,.62) 75%, rgba(10,10,14,.35)); }
+    .story { position: relative; padding: clamp(80px, 10vw, 130px) 0 60px; }
     .chapter { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 64px 0; }
     .chapter + .chapter { border-top: 1px solid rgba(255,255,255,.1); }
     .chapter .yrs { font-size: 14px; color: var(--amber); font-weight: 600; margin-bottom: 8px; }
@@ -181,8 +173,7 @@
     .ticket:hover { transform: rotate(0deg) translateY(-3px); }
 
     /* Closing: dusk window */
-    .closing { min-height: 92svh; display: grid; place-items: center; text-align: center; position: relative; isolation: isolate; padding: 120px 0 60px; }
-    .closing::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 60% at 50% 55%, rgba(8,8,14,.15), rgba(8,8,14,.55) 70%, rgba(8,8,14,.8)); }
+    .closing { min-height: 80svh; border-top: 1px solid rgba(255,255,255,.08); display: grid; place-items: center; text-align: center; position: relative; isolation: isolate; padding: 120px 0 60px; }
     .say { display: inline-block; margin-top: -14px; padding: 16px 30px; border-radius: 14px; font: 800 28px/1 var(--display); letter-spacing: -.02em; color: #111; text-decoration: none;
       background: linear-gradient(180deg, #ffd59a, #f0a64a 60%, #d4842f); box-shadow: inset 0 2px 0 rgba(255,255,255,.55), inset 0 -4px 0 rgba(0,0,0,.18), 0 18px 30px -10px rgba(0,0,0,.6);
       transform: rotate(-6deg); transition: transform .25s var(--ease-out); position: relative; z-index: 2; }
@@ -207,8 +198,6 @@
   </style>
 </head>
 <body>
-  <canvas id="gl" aria-hidden="true"></canvas>
-  <canvas id="field" aria-hidden="true"></canvas>
 
   <nav class="pill-nav" aria-label="Main">
     <a class="mark" href="#top" aria-label="Back to top">AP</a>
@@ -240,21 +229,20 @@
             <div class="t">How I got here</div>
             <div class="stage">
               <div class="polaroid" style="left:22px;top:50px;width:120px;height:150px;--r:-8deg"><div class="ph">Headshot<br>coming</div><span class="cap">me, 2026</span></div>
-              <div class="polaroid" style="left:128px;top:22px;width:120px;height:140px;--r:7deg"><img src="assets/ph-noon.jpg" alt="Real-time render of a grass field under a blue sky"><span class="cap">first render</span></div>
+              <div class="polaroid" style="left:128px;top:22px;width:120px;height:140px;--r:7deg"><div class="ph">Render<br>goes here</div><span class="cap">first render</span></div>
             </div>
           </a>
           <a class="hcard" href="#life">
             <div class="t">Life off-screen</div>
             <div class="stage">
-              <div class="polaroid" style="left:26px;top:30px;width:150px;height:150px;--r:-5deg"><img src="assets/ph-golden.jpg" alt="Golden-hour field"><span class="cap">golden hour</span></div>
-              <div class="sticker" style="right:20px;bottom:30px;width:96px;height:96px;--r:9deg;background:#16171b;color:#f0a64a;font-size:15px">24<br>fps</div>
+              <div class="polaroid" style="left:26px;top:30px;width:150px;height:150px;--r:-5deg"><div class="ph">Render<br>goes here</div><span class="cap">off the clock</span></div>
+              <div class="sticker" style="right:20px;bottom:30px;width:96px;height:96px;--r:9deg;background:#16171b;color:#f0a64a;font-size:15px">Malick<br>fan</div>
             </div>
           </a>
         </div>
       </div>
     </header>
 
-    <div class="band to-paper" style="--glow: rgba(214,236,255,.95)" aria-hidden="true"></div>
 
     <div class="light">
       <section id="results">
@@ -288,8 +276,8 @@
         <div class="wrap">
           <h2 class="h-l reveal">Work I've shipped</h2>
           <div class="work">
-            <article class="wcard reveal"><header>Product imagery <span>DreamLine</span></header><div class="art"><img src="assets/ph-noon.jpg" alt="Placeholder render"></div><footer>E-commerce silo and detail shots · 3D</footer></article>
-            <article class="wcard reveal"><header>Lifestyle scenes <span>Marketing</span></header><div class="art"><img src="assets/ph-golden.jpg" alt="Placeholder render"></div><footer>Full-room renders for campaigns and retail partners · 3D</footer></article>
+            <article class="wcard reveal"><header>Product imagery <span>DreamLine</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>E-commerce silo and detail shots · 3D</footer></article>
+            <article class="wcard reveal"><header>Lifestyle scenes <span>Marketing</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>Full-room renders for campaigns and retail partners · 3D</footer></article>
             <article class="wcard reveal"><header>Product motion <span>Video</span></header><div class="art"><div class="ph">Your animation still or loop goes here</div></div><footer>Feature animations and social cut-downs · Motion</footer></article>
             <article class="wcard reveal"><header>AI imagery pipeline <span>Ops</span></header><div class="art"><div class="ph">Before / after of the AI workflow goes here</div></div><footer>1,500–2,000 assets a month from a team of five · Process</footer></article>
             <article class="wcard reveal"><header>Agile 3D pipeline <span>Ops</span></header><div class="art"><div class="ph">Board or tracker screenshot goes here</div></div><footer>Every asset tracked from request to delivery · Process</footer></article>
@@ -299,7 +287,6 @@
       </section>
     </div>
 
-    <div class="band from-paper" style="--glow: rgba(255,214,160,.9)" aria-hidden="true"></div>
 
     <section class="story" id="story">
       <div class="wrap">
@@ -312,7 +299,7 @@
             <p>Animation degree from the Art Institute of Philadelphia, then contract lighting work, then DreamLine. I modeled, lit, and rendered photoreal product images and animation for more than 20 brands, and learned what great work really costs.</p>
           </div>
           <div class="collage" aria-hidden="true">
-            <div class="polaroid" data-par="-.08" style="left:6%;top:20px;width:52%;height:230px;--r:-6deg"><img src="assets/ph-noon.jpg" alt=""><span class="cap">V-Ray days</span></div>
+            <div class="polaroid" data-par="-.08" style="left:6%;top:20px;width:52%;height:230px;--r:-6deg"><div class="ph">Render<br>goes here</div><span class="cap">V-Ray days</span></div>
             <div class="polaroid" data-par=".06" style="right:4%;top:90px;width:40%;height:180px;--r:8deg"><div class="ph">Early render<br>goes here</div><span class="cap">2015</span></div>
             <span class="chip c2" data-par=".12" style="left:40%;bottom:6px;--r:-6deg">Maya</span>
           </div>
@@ -330,7 +317,7 @@
           </div>
           <div class="collage" aria-hidden="true">
             <div class="polaroid" data-par=".07" style="left:4%;top:50px;width:44%;height:190px;--r:-7deg"><div class="ph">Team photo<br>goes here</div><span class="cap">the crew</span></div>
-            <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><img src="assets/ph-golden.jpg" alt=""><span class="cap">review day</span></div>
+            <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><div class="ph">Render<br>goes here</div><span class="cap">review day</span></div>
             <div class="sticker" data-par=".1" style="left:38%;bottom:4px;width:104px;height:104px;--r:-10deg;background:linear-gradient(160deg,#9fd6ff,#4b9ef0);color:#fff">9<br>artists</div>
           </div>
         </div>
@@ -365,7 +352,7 @@
           <span class="ticket reveal" style="--r:-1.5deg">Evangelion<small>Hideaki Anno</small></span>
           <span class="ticket reveal" style="--r:3deg">Blade Runner<small>and Alien, Dune, The Matrix</small></span>
           <span class="ticket reveal" style="--r:-2.5deg">Ping Pong the Animation<small>Masaaki Yuasa</small></span>
-          <span class="ticket reveal" style="--r:1.5deg">All About Lily Chou-Chou<small>this site's field</small></span>
+          <span class="ticket reveal" style="--r:1.5deg">Berserk<small>and Gundam: The 08th MS Team</small></span>
         </div>
       </div>
     </section>
@@ -387,7 +374,7 @@
       </div>
     </section>
   </main>
-  <footer>© 2026 Austin Page · Rendered in real time, Philadelphia</footer>
+  <footer>© 2026 Austin Page · Philadelphia</footer>
 
   <script>
   (() => {
@@ -441,183 +428,7 @@
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { onScrollFx(); ticking = false; }); } }, { passive: true });
     addEventListener('resize', onScrollFx); onScrollFx();
 
-    // ---------- Living background: sky, sun, clouds, reed field, dust ----------
-    // Inspired by the wide fields of All About Lily Chou-Chou. The page is one
-    // day: blue noon at the top, the sun sinking through golden hour to dusk as
-    // you scroll. A soft breeze always moves the reeds; scrolling sends gusts.
-    const cv = document.getElementById('field'), cx = cv.getContext('2d');
-    let W, H, DPR, D = [];
-    const TILT = -5 * Math.PI / 180;
-    const hash = n => { n = Math.sin(n * 127.1 + 311.7) * 43758.5453; return n - Math.floor(n); };
-    const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
-    const rgb = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
-    const smooth = x => x * x * (3 - 2 * x);
-    // Time-of-day keys: skyTop, skyHorizon, fieldFar, fieldNear, bladeHi, sun, dust
-    const KEYS = [
-      { at: 0,   c: [[40, 104, 196], [196, 222, 244], [128, 178, 104], [58, 140, 36], [176, 226, 96], [255, 255, 246], [255, 255, 255]] },   // noon
-      { at: .4,  c: [[52, 104, 178], [214, 224, 226], [130, 168, 92], [62, 128, 34], [196, 222, 100], [255, 246, 214], [255, 244, 214]] },   // afternoon
-      { at: .72, c: [[64, 88, 140], [246, 196, 128], [128, 132, 70], [58, 92, 28], [226, 196, 96], [255, 206, 120], [255, 214, 150]] },     // golden hour
-      { at: 1,   c: [[22, 30, 64], [226, 136, 112], [52, 62, 56], [20, 34, 26], [122, 124, 92], [255, 132, 80], [255, 190, 140]] }        // dusk
-    ];
-    function palette(p) {
-      for (let i = 0; i < KEYS.length - 1; i++) { const a = KEYS[i], b = KEYS[i + 1];
-        if (p <= b.at) { const t = smooth((p - a.at) / (b.at - a.at)); return a.c.map((c, j) => mix(c, b.c[j], t)); } }
-      return KEYS[KEYS.length - 1].c;
-    }
-    // Cumulus sprites: soft puffs, lit from above, shaded underneath. Two looks
-    // (white noon, peach golden-hour) crossfade with the time of day.
-    function cloudSprite(seed, light, shade) {
-      const w = 640, h = 280, c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d');
-      if ('filter' in g) g.filter = 'blur(8px)';
-      const n = 34;
-      for (let i = 0; i < n; i++) {
-        const u = hash(seed * 13 + i), v = hash(seed * 7 + i * 3.1);
-        const x = w * (.14 + .72 * u), dome = Math.sin(Math.PI * (.14 + .72 * u));
-        const r = 26 + 64 * dome * (.55 + .45 * v);
-        const y = h * .78 - r * .55 - dome * 70 * v;
-        const gr = g.createRadialGradient(x - r * .3, y - r * .45, r * .1, x, y, r);
-        gr.addColorStop(0, rgb(light, 1)); gr.addColorStop(.7, rgb(mix(light, shade, .35), 1)); gr.addColorStop(1, rgb(shade, .0));
-        g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
-      }
-      g.filter = 'none'; g.globalCompositeOperation = 'source-atop';
-      const sh = g.createLinearGradient(0, h * .35, 0, h * .85); sh.addColorStop(0, rgb(shade, 0)); sh.addColorStop(1, rgb(shade, .55));
-      g.fillStyle = sh; g.fillRect(0, 0, w, h);
-      return c;
-    }
-    const CLOUDS = Array.from({ length: 7 }, (_, i) => ({
-      noon: cloudSprite(i + 1, [255, 255, 255], [150, 172, 205]),
-      gold: cloudSprite(i + 1, [255, 232, 200], [176, 120, 130]),
-      d: .25 + .75 * hash(i * 9.7),                     // depth: far .. near
-      x: hash(i * 3.3), y: hash(i * 5.9)
-    })).sort((a, b) => a.d - b.d);
-
-    function build() {
-      DPR = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
-      cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      D = Array.from({ length: W < 640 ? 50 : 110 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .3,
-        s: Math.random() * .3 + .05, o: Math.random() * 6.28, dx: 0, dy: 0 }));
-    }
-
-    let wind = 0, gust = 0, lastY = scrollY, dolly = 0, quality = 1, fpsAcc = 0, fpsN = 0;
-    addEventListener('scroll', () => { const d = scrollY - lastY; lastY = scrollY; gust = Math.max(-2.2, Math.min(2.2, gust + d * .012)); }, { passive: true });
-    const fc = document.createElement('canvas'), fx = fc.getContext('2d'); const FS = .6; let sunPos = null;
-
-    function scene(g, t, dt, P, prog) {
-      const hz = H * (.56 - .1 * Math.min(1, scrollY / H));       // horizon rises a touch as the camera tilts down
-      g.save(); g.translate(W / 2, H / 2); g.rotate(TILT); g.translate(-W / 2, -H / 2);
-      const X0 = -W * .15, X1 = W * 1.15;
-      // sky
-      const sk = g.createLinearGradient(0, -H * .15, 0, hz + 4);
-      sk.addColorStop(0, rgb(P[0])); sk.addColorStop(.55, rgb(mix(P[0], P[1], .45))); sk.addColorStop(1, rgb(P[1]));
-      g.fillStyle = sk; g.fillRect(X0, -H * .25, X1 - X0, hz + H * .25 + 2);
-      // sun: high and small at noon, sinking, swelling, and warming toward the horizon
-      const sp = smooth(Math.min(1, prog / .96));
-      const sx = W * (.78 - .08 * sp), sy = lerp(H * .2, hz - 6, sp), sr = lerp(24, 54, sp);
-      const halo = g.createRadialGradient(sx, sy, 0, sx, sy, sr * lerp(9, 6, sp));
-      halo.addColorStop(0, rgb(P[5], .55)); halo.addColorStop(.25, rgb(P[5], .18)); halo.addColorStop(1, rgb(P[5], 0));
-      g.fillStyle = halo; g.fillRect(X0, -H * .25, X1 - X0, hz + H * .25);
-      g.fillStyle = rgb(mix(P[5], [255, 255, 255], .5)); g.beginPath(); g.arc(sx, sy, sr, 0, 7); g.fill();
-      sunPos = { x: sx, y: sy, r: sr, sp };
-      // clouds drift with depth parallax, thinning toward dusk
-      const goldT = smooth(Math.min(1, Math.max(0, (prog - .35) / .45)));
-      const cloudA = 1 - .55 * smooth(Math.max(0, (prog - .7) / .3));
-      for (const c of CLOUDS) {
-        const cw = lerp(260, 760, c.d), ch = cw * 280 / 640;
-        const span = X1 - X0 + cw;
-        const x = X0 - cw + (((c.x * span + dolly * (.05 + .25 * c.d)) % span) + span) % span;
-        const y = lerp(hz * .1, hz - ch * .55, Math.pow(1 - c.d, .8) * .9 * c.y + (1 - c.y) * .05) - scrollY * .04 * c.d;
-        g.globalAlpha = cloudA * (1 - goldT) * lerp(.75, 1, c.d); g.drawImage(c.noon, x, y, cw, ch);
-        g.globalAlpha = cloudA * goldT * lerp(.75, 1, c.d); g.drawImage(c.gold, x, y, cw, ch);
-      }
-      g.globalAlpha = 1;
-      // horizon haze
-      const hzG = g.createLinearGradient(0, hz - H * .08, 0, hz + H * .05);
-      hzG.addColorStop(0, rgb(P[1], 0)); hzG.addColorStop(.6, rgb(P[1], .7)); hzG.addColorStop(1, rgb(P[1], 0));
-      g.fillStyle = hzG; g.fillRect(X0, hz - H * .08, X1 - X0, H * .13);
-      // ground
-      const gr = g.createLinearGradient(0, hz, 0, H * 1.15);
-      gr.addColorStop(0, rgb(mix(P[2], P[1], .4))); gr.addColorStop(.25, rgb(P[2])); gr.addColorStop(1, rgb(P[3]));
-      g.fillStyle = gr; g.fillRect(X0, hz, X1 - X0, H * 1.2 - hz);
-      // reeds
-      gust *= Math.pow(.965, dt / 16.7); wind = lerp(wind, gust, .06);
-      if (!reduce) dolly += dt * .012;
-      const N = W < 640 ? 6 : 8;
-      g.lineCap = 'round';
-      for (let i = 0; i < N; i++) {
-        const d = (i + 1) / N;
-        const base = hz + (H * 1.12 - hz) * Math.pow(d, 1.9);
-        const h = lerp(3, W < 640 ? 70 : 120, d * d);
-        const spc = lerp(2.2, W < 640 ? 7 : 5.5, d) * quality;
-        const off = dolly * (.15 + 1.6 * d * d);
-        const k0 = Math.floor((X0 + off) / spc), k1 = Math.ceil((X1 + off) / spc);
-        const haze = Math.pow(1 - d, 2) * .8;
-        const cBody = mix(mix(P[3], P[2], 1 - d), P[1], haze * .55);
-        const cHi = mix(mix(P[4], P[2], 1 - d), P[1], haze * .45);
-        const bandG = g.createLinearGradient(0, base - h, 0, base + h * .6);
-        bandG.addColorStop(0, rgb(cBody, 0)); bandG.addColorStop(.6, rgb(mix(cBody, [0, 0, 0], .1), .9)); bandG.addColorStop(1, rgb(mix(cBody, [0, 0, 0], .1)));
-        g.fillStyle = bandG; g.fillRect(X0, base - h, X1 - X0, H * 1.25);
-        for (let pass = 0; pass < 2; pass++) {
-          g.beginPath();
-          for (let k = k0; k <= k1; k++) {
-            const r1 = hash(k * 1.37 + i * 91.1), r2 = hash(k * 2.11 + i * 17.3);
-            if (pass === 1 && r2 > .3) continue;
-            const x = k * spc - off + (r1 - .5) * spc * 1.6;
-            const y = base + (r2 - .5) * h * .5;
-            const bh = h * (.65 + r1 * .6);
-            const breeze = Math.sin(x * .0035 + t * .0011 + i * .7) * .22 + Math.sin(x * .011 + t * .0023) * .08;
-            const wave = wind * (.55 + .45 * Math.sin(x * .006 - t * .004 * Math.sign(wind || 1) + i));
-            const lean = (breeze + wave + (r2 - .5) * .25) * bh;
-            g.moveTo(x, y); g.quadraticCurveTo(x + lean * .25, y - bh * .55, x + lean, y - bh + Math.abs(lean) * .3);
-          }
-          g.lineWidth = lerp(.7, W < 640 ? 2.4 : 2.0, d) * (pass ? .7 : 1);
-          g.strokeStyle = pass ? rgb(cHi, .75) : rgb(cBody);
-          g.stroke();
-        }
-      }
-      g.restore();
-    }
-
-    let running = true, lastT = performance.now();
-    function draw(t) {
-      const dt = Math.min(50, t - lastT); lastT = t;
-      fpsAcc += dt; if (++fpsN === 30) { const ms = fpsAcc / 30; if (ms > 22 && quality < 2.2) quality += .25; else if (ms < 15 && quality > 1) quality -= .05; fpsAcc = fpsN = 0; }
-      mx = lerp(mx, tmx, .05); my = lerp(my, tmy, .05);
-      const docH = document.documentElement.scrollHeight - H;
-      const prog = Math.min(1, Math.max(0, scrollY / Math.max(1, docH)));
-      const P = palette(prog);
-      if (fc.width !== Math.round(W * FS) || fc.height !== Math.round(H * FS)) { fc.width = Math.round(W * FS); fc.height = Math.round(H * FS); }
-      cx.clearRect(0, 0, W, H);
-      if (!window.__field3d) {                          // 2D fallback when WebGL is unavailable
-        fx.setTransform(FS, 0, 0, FS, 0, 0);
-        scene(fx, t, dt, P, prog);
-        cx.imageSmoothingQuality = 'high'; cx.drawImage(fc, 0, 0, W, H);
-      }
-      // dust / pollen: catches the light, scatters from the cursor
-      const dc = P[6];
-      for (const p of D) {
-        if (!reduce) { p.x += Math.sin(t / 3000 + p.o) * .15 + p.s * .4; p.y -= p.s * .5; }
-        let x = p.x + (mx - .5) * -30, y = p.y - scrollY * .5;
-        y = ((y % H) + H) % H; if (p.x > W + 5) p.x = -5;
-        const ddx = x - px, ddy = y - py, d2 = ddx * ddx + ddy * ddy;
-        if (d2 < 14400) { const f = (1 - Math.sqrt(d2) / 120) * 2.2; p.dx += ddx / 120 * f; p.dy += ddy / 120 * f; }
-        p.dx *= .93; p.dy *= .93; p.x += p.dx; p.y += p.dy;
-        const tw = .6 + .4 * Math.sin(t / 700 + p.o);
-        cx.fillStyle = rgb(dc, .2 + .5 * tw);
-        cx.beginPath(); cx.arc(x, y, p.r, 0, 7); cx.fill();
-      }
-      if (running && !reduce) requestAnimationFrame(draw);
-    }
-
-    addEventListener('resize', build); build(); requestAnimationFrame(draw);
-    if (reduce) addEventListener('scroll', () => requestAnimationFrame(draw), { passive: true });
-    addEventListener('field3d', () => requestAnimationFrame(draw));
-    document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !reduce) requestAnimationFrame(draw); });
-
   })();
-  </script>
-  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
-  <script type="module">
-    import('./js/field3d.js').catch(e => console.warn('3D field unavailable, using the 2D scene.', e));
   </script>
 </body>
 </html>
