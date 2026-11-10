@@ -119,7 +119,8 @@
     .nums { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 44px; border-top: 1px solid #dddcd6; }
     .num { padding: 36px 32px 36px 0; border-bottom: 1px solid #dddcd6; }
     .num:nth-child(even) { padding-left: 32px; border-left: 1px solid #dddcd6; }
-    .num .big { font: 800 clamp(56px, 8vw, 104px)/.9 var(--display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+    .num .big { font: 800 clamp(44px, 6vw, 88px)/.9 var(--display); letter-spacing: -.02em; white-space: nowrap; }
+    .num .big .dash { margin: 0 .12em; font-weight: 500; position: relative; top: -.04em; }
     .num .h-s { margin-top: 10px; }
     .num p { color: var(--ink-2); font-size: 15.5px; margin-top: 6px; max-width: 36ch; }
     @media (max-width: 720px) { .nums { grid-template-columns: 1fr; } .num, .num:nth-child(even) { padding: 28px 0; border-left: 0; } }
@@ -254,7 +255,7 @@
         <div class="wrap">
           <h2 class="h-l reveal">The track record</h2>
           <div class="nums">
-            <div class="num reveal"><div class="big">1,500–2,000</div><div class="h-s">assets a month</div><p>Shipped by a production team of four to five, with AI built into the pipeline.</p></div>
+            <div class="num reveal"><div class="big">1,500<span class="dash">–</span>2,000</div><div class="h-s">assets a month</div><p>Shipped by a production team of four to five, with AI built into the pipeline.</p></div>
             <div class="num reveal"><div class="big">10+</div><div class="h-s">artists led</div><p>3D artists, motion designers, and 2D designers, coached from assignment through final review.</p></div>
             <div class="num reveal"><div class="big">20+</div><div class="h-s">brands served</div><p>Photoreal product imagery and animation across about 20 product categories.</p></div>
             <div class="num reveal"><div class="big">11</div><div class="h-s">years in production</div><p>From rendering the products myself to running the team that ships them.</p></div>
