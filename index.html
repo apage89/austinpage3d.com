@@ -134,6 +134,7 @@
     .wcard .art { aspect-ratio: 4 / 3; background: #f1f0eb; position: relative; overflow: hidden; display: grid; place-items: center; }
     .wcard .art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out); }
     .wcard:hover .art img { transform: scale(1.04); }
+    .wcard .art img.fit { object-fit: contain; background: #fff; padding: 18px; }
     .wcard .art .ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 20px; color: #8b8b92; font-size: 14px; background: repeating-linear-gradient(135deg, #efeee9 0 10px, #f5f4f0 10px 20px); }
     .wcard footer { padding: 12px 16px; font-size: 13.5px; color: var(--ink-3); }
     .wcard.next .art { background: radial-gradient(circle at 50% 40%, #fff, #f1f0eb); }
@@ -267,9 +268,9 @@
         <div class="wrap">
           <h2 class="h-l reveal">Work I've shipped</h2>
           <div class="work">
-            <article class="wcard reveal"><header>Product imagery <span>E-commerce</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>E-commerce silo and detail shots · 3D</footer></article>
+            <article class="wcard reveal"><header>Product imagery <span>E-commerce</span></header><div class="art"><img class="fit" src="img/shelf-silo.jpg" alt="3D render of a curved glass corner shelf with chrome mounts on white" loading="lazy" width="600" height="600"></div><footer>E-commerce silo and detail shots · 3D</footer></article>
             <article class="wcard reveal"><header>Lifestyle scenes <span>Marketing</span></header><div class="art"><img src="img/winter-bedroom.jpg" alt="Photoreal render of a concrete bedroom with a stone wall and floor-to-ceiling windows onto a snowy forest" loading="lazy" width="1200" height="800"></div><footer>Full-room renders for campaigns and retail partners · 3D</footer></article>
-            <article class="wcard reveal"><header>Product motion <span>Video</span></header><div class="art"><div class="ph">Your animation still or loop goes here</div></div><footer>Feature animations and social cut-downs · Motion</footer></article>
+            <article class="wcard reveal"><header>Product motion <span>Video</span></header><div class="art"><img src="img/tub-scene.jpg" alt="Still from a product animation: a clawfoot tub in a sunlit bathroom" loading="lazy"></div><footer>Feature animations and social cut-downs · Motion</footer></article>
             <article class="wcard reveal"><header>AI imagery pipeline <span>Ops</span></header><div class="art"><div class="ph">Before / after of the AI workflow goes here</div></div><footer>1,500–2,000 assets a month from a team of five · Process</footer></article>
             <article class="wcard reveal"><header>Agile 3D pipeline <span>Ops</span></header><div class="art"><div class="ph">Board or tracker screenshot goes here</div></div><footer>Every asset tracked from request to delivery · Process</footer></article>
             <article class="wcard next reveal"><header>What's next?</header><div class="art"><a class="open-sticker" href="mailto:austinpage3d@gmail.com">OPEN<br>TO<br>WORK</a></div><footer>Creative operations or production leadership</footer></article>
@@ -308,7 +309,7 @@
           </div>
           <div class="collage" aria-hidden="true">
             <div class="polaroid" data-par=".07" style="left:4%;top:50px;width:44%;height:190px;--r:-7deg"><div class="ph">Team photo<br>goes here</div><span class="cap">the crew</span></div>
-            <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><div class="ph">Render<br>goes here</div><span class="cap">review day</span></div>
+            <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><img src="img/shower-square.jpg" alt="Rendered quarter-round shower enclosure in a bright bathroom" loading="lazy"><span class="cap">review day</span></div>
             <div class="sticker" data-par=".1" style="left:38%;bottom:4px;width:104px;height:104px;--r:-10deg;background:linear-gradient(160deg,#9fd6ff,#4b9ef0);color:#fff">10+<br>artists</div>
           </div>
         </div>
