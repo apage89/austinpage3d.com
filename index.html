@@ -63,8 +63,9 @@
     /* Hero: noon sky window */
     .hero { min-height: 100svh; padding: 120px 0 40px; display: flex; flex-direction: column; justify-content: center; isolation: isolate; position: relative; }
     .hero .wrap { width: 100%; min-width: 0; }
-    .banner { display: block; width: 100vw; max-width: none; height: auto; margin: 0 0 34px calc(50% - 50vw); aspect-ratio: 32 / 9; object-fit: cover; object-position: 50% 26%; border-radius: 0; }
-    @media (max-width: 720px) { .banner { aspect-ratio: 16 / 9; object-position: 50% 22%; } }
+    .banner { display: block; width: 100vw; margin: 0 0 34px calc(50% - 50vw); }
+    .banner img { display: block; width: 100%; height: auto; aspect-ratio: 21 / 9; object-fit: cover; object-position: 51% 30%; }
+    @media (max-width: 720px) { .banner img { aspect-ratio: 4 / 5; object-position: 50% 30%; } }
     .avatar { width: 88px; height: 88px; border-radius: 22px; object-fit: cover; margin-bottom: 22px; box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 14px 30px -12px rgba(0,0,0,.7); }
     .loc { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--snow-2); margin-bottom: 18px; }
     .loc i { width: 7px; height: 7px; border-radius: 50%; background: #7ef0b0; box-shadow: 0 0 0 3px rgba(126,240,176,.18); }
@@ -209,7 +210,7 @@
   <main>
     <header class="hero" id="top">
       <div class="wrap">
-        <img class="banner reveal" src="img/austin-banner.jpg" alt="Portrait of Austin Page in a brick-walled studio" width="896" height="1200">
+        <picture class="banner reveal"><source media="(max-width: 720px)" srcset="img/hero-mobile.jpg"><img src="img/hero-wide.jpg" alt="Austin Page in a brick-walled creative studio" width="2400" height="1018"></picture>
         <div class="loc reveal"><i></i>Philadelphia, PA · Open to creative ops and production roles</div>
         <h1 class="h-xl reveal">Austin Page</h1>
         <p class="sub reveal">Creative production manager who turns marketing goals into plans 3D, motion, and design teams can actually hit, without losing the craft.</p>
@@ -226,13 +227,13 @@
             <div class="t">How I got here</div>
             <div class="stage">
               <div class="polaroid" style="left:22px;top:44px;width:132px;height:162px;--r:-8deg"><img src="img/austin-sq.jpg" alt="Austin Page"><span class="cap">me, 2026</span></div>
-              <div class="polaroid" style="left:128px;top:22px;width:120px;height:140px;--r:7deg"><div class="ph">Render<br>goes here</div><span class="cap">first render</span></div>
+              <div class="polaroid" style="left:128px;top:22px;width:120px;height:140px;--r:7deg"><img src="img/first-render.jpg" alt="Early CG test render of chrome and glass spheres on a checkerboard"><span class="cap">first render</span></div>
             </div>
           </a>
           <a class="hcard" href="#life">
             <div class="t">Life off-screen</div>
             <div class="stage">
-              <div class="polaroid" style="left:26px;top:30px;width:150px;height:150px;--r:-5deg"><div class="ph">Render<br>goes here</div><span class="cap">off the clock</span></div>
+              <div class="polaroid" style="left:26px;top:30px;width:150px;height:150px;--r:-5deg"><img src="img/off-the-clock.jpg" alt="Tall grass in a field at golden hour"><span class="cap">off the clock</span></div>
               <div class="sticker" style="right:20px;bottom:30px;width:96px;height:96px;--r:9deg;background:#16171b;color:#f0a64a;font-size:15px">Malick<br>fan</div>
             </div>
           </a>
@@ -273,8 +274,8 @@
             <article class="wcard reveal"><header>Product imagery <span>E-commerce</span></header><div class="art"><img class="fit" src="img/shelf-silo.jpg" alt="3D render of a curved glass corner shelf with chrome mounts on white" loading="lazy" width="600" height="600"></div><footer>E-commerce silo and detail shots · 3D</footer></article>
             <article class="wcard reveal"><header>Lifestyle scenes <span>Marketing</span></header><div class="art"><img src="img/winter-bedroom.jpg" alt="Photoreal render of a concrete bedroom with a stone wall and floor-to-ceiling windows onto a snowy forest" loading="lazy" width="1200" height="800"></div><footer>Full-room renders for campaigns and retail partners · 3D</footer></article>
             <article class="wcard reveal"><header>Product motion <span>Video</span></header><div class="art"><img src="img/tub-scene.jpg" alt="Still from a product animation: a clawfoot tub in a sunlit bathroom" loading="lazy"></div><footer>Feature animations and social cut-downs · Motion</footer></article>
-            <article class="wcard reveal"><header>AI imagery pipeline <span>Ops</span></header><div class="art"><div class="ph">Before / after of the AI workflow goes here</div></div><footer>1,500–2,000 assets a month from a team of five · Process</footer></article>
-            <article class="wcard reveal"><header>Agile 3D pipeline <span>Ops</span></header><div class="art"><div class="ph">Board or tracker screenshot goes here</div></div><footer>Every asset tracked from request to delivery · Process</footer></article>
+            <article class="wcard reveal"><header>AI imagery pipeline <span>Ops</span></header><div class="art"><img src="img/ai-before-after.jpg" alt="Before and after: a plain grey clay render of a clawfoot tub next to the finished AI-assisted lifestyle scene" loading="lazy"></div><footer>1,500–2,000 assets a month from a team of five · Process</footer></article>
+            <article class="wcard reveal"><header>Agile 3D pipeline <span>Ops</span></header><div class="art"><img src="img/pipeline-board.jpg" alt="Production tracking board on a monitor with columns from request to delivery" loading="lazy"></div><footer>Every asset tracked from request to delivery · Process</footer></article>
             <article class="wcard next reveal"><header>What's next?</header><div class="art"><a class="open-sticker" href="mailto:austinpage3d@gmail.com">OPEN<br>TO<br>WORK</a></div><footer>Creative operations or production leadership</footer></article>
           </div>
         </div>
@@ -294,7 +295,7 @@
           </div>
           <div class="collage" aria-hidden="true">
             <div class="polaroid" data-par="-.08" style="left:6%;top:20px;width:52%;height:230px;--r:-6deg"><img src="img/winter-bedroom-sm.jpg" alt="Maya and V-Ray interior render of a winter bedroom" loading="lazy"><span class="cap">V-Ray days</span></div>
-            <div class="polaroid" data-par=".06" style="right:4%;top:90px;width:40%;height:180px;--r:8deg"><div class="ph">Early render<br>goes here</div><span class="cap">2015</span></div>
+            <div class="polaroid" data-par=".06" style="right:4%;top:90px;width:40%;height:180px;--r:8deg"><img src="img/early-render-2015.jpg" alt="Interior render of a living room with a snowy forest view" loading="lazy"><span class="cap">2015</span></div>
             <span class="chip c2" data-par=".12" style="left:40%;bottom:6px;--r:-6deg">Maya</span>
           </div>
         </div>
@@ -310,7 +311,7 @@
             </ul>
           </div>
           <div class="collage" aria-hidden="true">
-            <div class="polaroid" data-par=".07" style="left:4%;top:50px;width:44%;height:190px;--r:-7deg"><div class="ph">Team photo<br>goes here</div><span class="cap">the crew</span></div>
+            <div class="polaroid" data-par=".07" style="left:4%;top:50px;width:44%;height:190px;--r:-7deg"><img src="img/the-crew.jpg" alt="A small creative team reviewing a shower render together" loading="lazy"><span class="cap">the crew</span></div>
             <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><img src="img/shower-square.jpg" alt="Rendered quarter-round shower enclosure in a bright bathroom" loading="lazy"><span class="cap">review day</span></div>
             <div class="sticker" data-par=".1" style="left:38%;bottom:4px;width:104px;height:104px;--r:-10deg;background:linear-gradient(160deg,#9fd6ff,#4b9ef0);color:#fff">10+<br>artists</div>
           </div>
@@ -327,7 +328,7 @@
             </ul>
           </div>
           <div class="collage" aria-hidden="true">
-            <div class="polaroid" data-par="-.07" style="left:10%;top:16px;width:48%;height:220px;--r:4deg"><div class="ph">AI workflow<br>example here</div><span class="cap">scaling up</span></div>
+            <div class="polaroid" data-par="-.07" style="left:10%;top:16px;width:48%;height:220px;--r:4deg"><img src="img/scaling-up.jpg" alt="Grid of glass shelf variations in different finishes and settings" loading="lazy"><span class="cap">scaling up</span></div>
             <span class="chip c1" data-par=".1" style="right:8%;top:40px;--r:10deg">Claude</span>
             <span class="chip c3" data-par=".05" style="right:14%;top:120px;--r:-6deg;--d:-2s">Higgsfield</span>
             <span class="chip c2" data-par=".14" style="left:44%;bottom:10px;--r:-3deg;--d:-3.4s">2,000/mo</span>
