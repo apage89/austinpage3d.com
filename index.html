@@ -112,27 +112,17 @@
     .stat p { color: var(--ink-2); font-size: 15px; margin-top: 4px; max-width: 26ch; }
     @media (max-width: 760px) { .stats { grid-template-columns: 1fr; gap: 26px; } .stat { border: 0; padding: 0; } }
 
-    /* How I move the work: list + dial */
-    .how { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-top: 44px; }
-    .how ol { list-style: none; border-top: 1px solid #dddcd6; }
-    .how li { border-bottom: 1px solid #dddcd6; }
-    .how button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 18px 0; cursor: pointer; font: 700 20px/1.2 var(--display); letter-spacing: -.015em; color: var(--ink-3); transition: color .2s ease; }
-    .how li.on button, .how button:hover { color: var(--ink); }
-    .how .body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ease-out); }
-    .how .body > div { overflow: hidden; }
-    .how .body p { color: var(--ink-2); padding: 0 0 20px; font-size: 16px; }
-    .how li.on .body { grid-template-rows: 1fr; }
-    .dial-wrap { display: grid; place-items: center; }
-    .dial { width: min(360px, 80vw); aspect-ratio: 1; border-radius: 50%; position: relative;
-      background: radial-gradient(circle at 50% 35%, #fff, #d9d8d3 60%, #b9b8b2); box-shadow: 0 30px 50px -20px rgba(0,0,0,.35), inset 0 2px 2px #fff, inset 0 -8px 20px rgba(0,0,0,.12); }
-    .dial .ticks { position: absolute; inset: 6%; border-radius: 50%; background: repeating-conic-gradient(from -2deg, #8b8b92 0 1deg, transparent 1deg 7.5deg);
-      -webkit-mask: radial-gradient(circle, transparent 64%, #000 65%, #000 70%, transparent 71%); mask: radial-gradient(circle, transparent 64%, #000 65%, #000 70%, transparent 71%); }
-    .dial .knob { position: absolute; inset: 20%; border-radius: 50%; background: conic-gradient(from 0deg, #f4f3ef, #a9a8a2, #f4f3ef, #9d9c96, #f4f3ef, #b5b4ae, #f4f3ef);
-      box-shadow: 0 14px 24px -8px rgba(0,0,0,.45), inset 0 0 0 6px rgba(255,255,255,.4); transform: rotate(var(--turn, -60deg)); transition: transform .6s var(--ease-in-out); }
-    .dial .knob::before { content: ""; position: absolute; left: 50%; top: 7%; width: 6px; height: 18%; margin-left: -3px; border-radius: 3px; background: var(--amber); box-shadow: 0 0 0 2px rgba(0,0,0,.08); }
-    .dial .knob::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #cfcec9 70%); box-shadow: inset 0 -3px 8px rgba(0,0,0,.15); }
-    .dial .lbl { position: absolute; font: 600 12px/1 var(--body); color: var(--ink-2); }
-    @media (max-width: 860px) { .how { grid-template-columns: 1fr; } .dial-wrap { order: -1; } .dial { width: 240px; } }
+    .stat .win { margin-top: 12px; font: 600 14px/1.3 var(--body); color: var(--ink); display: flex; gap: 8px; align-items: baseline; }
+    .stat .win::before { content: ""; flex: 0 0 8px; height: 8px; border-radius: 50%; background: var(--amber); transform: translateY(-1px); }
+
+    /* Track record: big numbers */
+    .nums { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 44px; border-top: 1px solid #dddcd6; }
+    .num { padding: 36px 32px 36px 0; border-bottom: 1px solid #dddcd6; }
+    .num:nth-child(even) { padding-left: 32px; border-left: 1px solid #dddcd6; }
+    .num .big { font: 800 clamp(56px, 8vw, 104px)/.9 var(--display); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+    .num .h-s { margin-top: 10px; }
+    .num p { color: var(--ink-2); font-size: 15.5px; margin-top: 6px; max-width: 36ch; }
+    @media (max-width: 720px) { .nums { grid-template-columns: 1fr; } .num, .num:nth-child(even) { padding: 28px 0; border-left: 0; } }
 
     /* Work grid */
     .work { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
@@ -220,7 +210,7 @@
         <h1 class="h-xl reveal">Austin Page</h1>
         <p class="sub reveal">Creative production manager who turns marketing goals into plans 3D, motion, and design teams can actually hit, without losing the craft.</p>
         <div class="hero-cards" id="heroCards">
-          <a class="hcard" href="#how">
+          <a class="hcard" href="#results">
             <div class="t">Where I help</div>
             <div class="stage">
               <span class="chip c1" style="left:20px;top:40px;--r:-12deg">3D</span>
@@ -251,26 +241,23 @@
       <section id="results">
         <div class="wrap">
           <h2 class="h-l reveal">Where I drive results</h2>
-          <p class="sub reveal" style="margin-top:18px">Eleven years at DreamLine and American Bath Group, from rendering the products myself to running the team that ships them.</p>
+          <p class="sub reveal" style="margin-top:18px">I bring AI into every stage of the creative pipeline, from the first request to the final file, so teams spend less time on busywork and less money on rework.</p>
           <div class="stats">
-            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div><div class="h-s">1,500–2,000 assets a month</div><p>From a team of four to five, with AI built into the pipeline.</p></div>
-            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.4 6-5.4s5.4 2 6 5.4M16 4.6a3.2 3.2 0 0 1 0 6.4M18.5 14.8c1.4.8 2.3 2.6 2.5 5.2"/></svg></div><div class="h-s">9 artists led and coached</div><p>3D, motion, and 2D designers, from assignments to quality reviews.</p></div>
-            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><div class="h-s">20+ brands served</div><p>Photoreal product imagery and animation across about 20 categories.</p></div>
+            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 4h6M9 4a2 2 0 0 0-2 2v0h10v0a2 2 0 0 0-2-2M7 6H5v15h14V6h-2M9 12h6M9 16h4"/></svg></div><div class="h-s">Intake and scoping</div><p>AI turns loose requests into structured briefs with scope, references, and estimates, so work starts faster with fewer revision rounds.</p><p class="win">Saves time before work even begins</p></div>
+            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg></div><div class="h-s">Production: 3D, 2D, motion</div><p>Generative tools handle concepts, variations, backgrounds, and cleanup alongside traditional pipelines, so each artist delivers more.</p><p class="win">More output without more headcount</p></div>
+            <div class="stat reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 17v3h16v-3"/></svg></div><div class="h-s">Asset delivery</div><p>Automated naming, resizing, format exports, and handoff to e-commerce and marketing replace hours of manual prep on every launch.</p><p class="win">Less manual work, fewer costly errors</p></div>
           </div>
         </div>
       </section>
 
-      <section id="how">
+      <section id="numbers">
         <div class="wrap">
-          <h2 class="h-l reveal">How I move the work</h2>
-          <div class="how">
-            <ol id="howList">
-              <li class="on" data-turn="-60"><button>Own production end to end</button><div class="body"><div><p>Intake, scheduling, reviews, delivery. Every request becomes a realistic plan with an owner and a date, and leadership gets a weekly report they can trust.</p></div></div></li>
-              <li data-turn="-20"><button>Make artists better</button><div class="body"><div><p>I've sat in their chair, so feedback is specific and practical. I set the quality bar and help people reach it, across 3D, video, motion, and 2D.</p></div></div></li>
-              <li data-turn="20"><button>Translate the business into briefs</button><div class="body"><div><p>Marketing, e-commerce, and product all want something different. I turn that into clear priorities, honest timelines, and contractor deals that cost less.</p></div></div></li>
-              <li data-turn="60"><button>Put AI to work, safely</button><div class="body"><div><p>I brought Claude, ChatGPT, and Higgsfield into daily production and coached the team through it, so output scaled without the work looking generated.</p></div></div></li>
-            </ol>
-            <div class="dial-wrap reveal" aria-hidden="true"><div class="dial"><div class="ticks"></div><div class="knob" id="knob"></div></div></div>
+          <h2 class="h-l reveal">The track record</h2>
+          <div class="nums">
+            <div class="num reveal"><div class="big">1,500–2,000</div><div class="h-s">assets a month</div><p>Shipped by a production team of four to five, with AI built into the pipeline.</p></div>
+            <div class="num reveal"><div class="big">10+</div><div class="h-s">artists led</div><p>3D artists, motion designers, and 2D designers, coached from assignment through final review.</p></div>
+            <div class="num reveal"><div class="big">20+</div><div class="h-s">brands served</div><p>Photoreal product imagery and animation across about 20 product categories.</p></div>
+            <div class="num reveal"><div class="big">11</div><div class="h-s">years in production</div><p>From rendering the products myself to running the team that ships them.</p></div>
           </div>
         </div>
       </section>
@@ -279,7 +266,7 @@
         <div class="wrap">
           <h2 class="h-l reveal">Work I've shipped</h2>
           <div class="work">
-            <article class="wcard reveal"><header>Product imagery <span>DreamLine</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>E-commerce silo and detail shots · 3D</footer></article>
+            <article class="wcard reveal"><header>Product imagery <span>E-commerce</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>E-commerce silo and detail shots · 3D</footer></article>
             <article class="wcard reveal"><header>Lifestyle scenes <span>Marketing</span></header><div class="art"><div class="ph">Render<br>goes here</div></div><footer>Full-room renders for campaigns and retail partners · 3D</footer></article>
             <article class="wcard reveal"><header>Product motion <span>Video</span></header><div class="art"><div class="ph">Your animation still or loop goes here</div></div><footer>Feature animations and social cut-downs · Motion</footer></article>
             <article class="wcard reveal"><header>AI imagery pipeline <span>Ops</span></header><div class="art"><div class="ph">Before / after of the AI workflow goes here</div></div><footer>1,500–2,000 assets a month from a team of five · Process</footer></article>
@@ -299,7 +286,7 @@
           <div class="reveal">
             <div class="yrs">2013 – 2019</div>
             <h3 class="h-m">The artist</h3>
-            <p>Animation degree from the Art Institute of Philadelphia, then contract lighting work, then DreamLine. I modeled, lit, and rendered photoreal product images and animation for more than 20 brands, and learned what great work really costs.</p>
+            <p>Animation degree from the Art Institute of Philadelphia, then contract lighting work, then a home-products manufacturer. I modeled, lit, and rendered photoreal product images and animation for more than 20 brands, and learned what great work really costs.</p>
           </div>
           <div class="collage" aria-hidden="true">
             <div class="polaroid" data-par="-.08" style="left:6%;top:20px;width:52%;height:230px;--r:-6deg"><div class="ph">Render<br>goes here</div><span class="cap">V-Ray days</span></div>
@@ -313,7 +300,7 @@
             <div class="yrs">2019 – 2025</div>
             <h3 class="h-m">The lead</h3>
             <ul>
-              <li>Led and mentored nine 3D artists: assignments, reviews, and quality standards.</li>
+              <li>Led and mentored 10+ artists: assignments, reviews, and quality standards.</li>
               <li>Built an Agile pipeline that tracked every asset from request to delivery.</li>
               <li>Became the main contact for stakeholders and owned weekly reporting to leadership.</li>
             </ul>
@@ -321,7 +308,7 @@
           <div class="collage" aria-hidden="true">
             <div class="polaroid" data-par=".07" style="left:4%;top:50px;width:44%;height:190px;--r:-7deg"><div class="ph">Team photo<br>goes here</div><span class="cap">the crew</span></div>
             <div class="polaroid" data-par="-.06" style="right:8%;top:10px;width:46%;height:200px;--r:5deg"><div class="ph">Render<br>goes here</div><span class="cap">review day</span></div>
-            <div class="sticker" data-par=".1" style="left:38%;bottom:4px;width:104px;height:104px;--r:-10deg;background:linear-gradient(160deg,#9fd6ff,#4b9ef0);color:#fff">9<br>artists</div>
+            <div class="sticker" data-par=".1" style="left:38%;bottom:4px;width:104px;height:104px;--r:-10deg;background:linear-gradient(160deg,#9fd6ff,#4b9ef0);color:#fff">10+<br>artists</div>
           </div>
         </div>
 
@@ -396,12 +383,6 @@
       const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
       el.style.transitionDelay = Math.min(sibs.indexOf(el), 8) * 30 + 'ms'; io.observe(el);
     });
-
-    // How I move the work: accordion drives the dial
-    const knob = document.getElementById('knob'), items = [...document.querySelectorAll('#howList li')];
-    const pick = li => { items.forEach(x => x.classList.toggle('on', x === li)); knob.style.setProperty('--turn', li.dataset.turn + 'deg'); };
-    items.forEach(li => li.querySelector('button').addEventListener('click', () => pick(li)));
-    pick(items[0]);
 
     // Tool sets crossfade
     const sets = [...document.querySelectorAll('.tool-set')]; let si = 0;
